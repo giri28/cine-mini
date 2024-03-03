@@ -1,11 +1,11 @@
-name: Python CI Workflow
+name: Cine Mini Application CI Workflow
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  Build-Test:
+  Build-and-Test:
     runs-on: ubuntu-latest
 
     steps:
