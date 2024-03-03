@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  Build:
+  Build and Test:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,22 +22,10 @@ jobs:
         python3 -m pip install --upgrade pip
         python3 -m pip install --upgrade setuptools
         pip install -r requirements.txt
-  
-  Test:
-    runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.10'
-
-    - name: Test
+    - name: Build and Test
       run: python3 app_tests.py
-    
+
   Lint:
     runs-on: ubuntu-latest
 
@@ -49,6 +37,12 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        python3 -m pip install --upgrade setuptools
+        pip install -r requirements.txt
 
     - name: Lint Check
       run: flake8 .
