@@ -1,6 +1,5 @@
 import unittest
 
-from mockito import unstub, when
 from app import app
 
 class TestApp(unittest.TestCase):
@@ -21,9 +20,6 @@ class TestApp(unittest.TestCase):
         response = self.app.get('/')
         self.assertEqual(response.status_code, 200)        
 
-    def tearDown(self):
-        # Clean up mocks
-        unstub()
 
 if __name__ == '__main__':
     unittest.main()

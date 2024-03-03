@@ -1,4 +1,7 @@
+import threading
 from flask import Flask, request, jsonify, render_template
+import time
+import os
 
 app = Flask(__name__)
 
@@ -7,6 +10,8 @@ movies = {
     "2": {"title": "The Shawshank Redemption", "showtimes": ["1:00 PM", "4:00 PM", "7:00 PM"], "seats": 250},
     "3": {"title": "The Godfather", "showtimes": ["2:00 PM", "5:00 PM", "8:00 PM"], "seats": 120}
 }
+
+shutdown_flag = False
 
 @app.route('/')
 def index():
@@ -38,5 +43,21 @@ def book():
 
     return render_template('success.html', message='Booking successful!', remaining_seats=remaining_seats)
 
+def shutdown_server():
+    """Shuts down the Flask server."""
+    os.kill(os.getpid(), 9)  # Terminate the Flask server process
+
+def shutdown_after_delay(delay):
+    """Initiates shutdown after the specified delay."""
+    global shutdown_flag
+    time.sleep(delay)
+    if not shutdown_flag:
+        shutdown_server()
+
 if __name__ == '__main__':
+    # Start a timer to initiate shutdown after 60 seconds (1 minute)
+    delay = 60
+    threading.Thread(target=shutdown_after_delay, args=(delay,), daemon=True).start()
+
+    # Run the Flask app
     app.run(debug=True)
