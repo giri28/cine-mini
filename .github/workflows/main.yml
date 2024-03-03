@@ -20,9 +20,11 @@ jobs:
     - name: Install dependencies
       run: |
         python3 -m pip install --upgrade pip
+        python3 -m pip install --upgrade setuptools
+        pip install -r requirements.txt
 
     - name: Run Build
       run: python3 app.py
 
     - name: Run Test
-      run: python3 app_tests.py
+      run: python3 app_tests.py  
