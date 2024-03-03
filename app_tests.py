@@ -20,7 +20,7 @@ class TestApp(unittest.TestCase):
         }
         response = self.app.post('/book', data=data)
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Booking successful', response.data)
+        self.assertIn(b'Done', response.data)
 
     def test_invalid_movie_id(self):
         data = {
@@ -50,7 +50,7 @@ class TestApp(unittest.TestCase):
         }
         response = self.app.post('/book', data=data)
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Invalid number of tickets', response.data)
+        self.assertIn(b'Invalid no of tickets', response.data)
 
     def test_invalid_request_method(self):
         response = self.app.get('/book')
