@@ -1,6 +1,6 @@
 import unittest
-from flask import url_for
-from app import app, movies
+from app import app
+
 
 class TestApp(unittest.TestCase):
 
@@ -59,6 +59,7 @@ class TestApp(unittest.TestCase):
     def test_missing_parameters(self):
         response = self.app.post('/book')
         self.assertEqual(response.status_code, 400)  # Bad Request
+
 
 if __name__ == '__main__':
     unittest.main()
