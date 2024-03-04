@@ -106,3 +106,5 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_PROJECT_KEY: "giri28_cine-mini"
         SONAR_ORGANIZATION: "giri28"
+  sources:
+    - .  
