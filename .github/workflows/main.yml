@@ -86,7 +86,9 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
       
     - name: Set up Python 3.10
       uses: actions/setup-python@v2
@@ -103,9 +105,9 @@ jobs:
       uses: sonarsource/sonarcloud-github-action@master
       with:
         projectBaseDir: ./
+        args: >
+          -Dsonar.organization=giri28
+          -Dsonar.projectKey=giri28_cine-mini
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        SONAR_PROJECT_KEY: "giri28_cine-mini"
-        SONAR_ORGANIZATION: "giri28"
