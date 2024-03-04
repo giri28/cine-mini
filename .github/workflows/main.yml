@@ -5,8 +5,38 @@ on:
     branches: [ main ]
 
 jobs:
-  Build-and-Test:
+  Build:
     runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        python3 -m pip install --upgrade setuptools
+        pip install pyinstaller
+        pip install -r requirements.txt
+
+    - name: Build
+      run: pyinstaller --onefile app.py
+
+    - name: Publish Artifact
+      uses: actions/upload-artifact@v2
+      with: 
+        name: appExecutable
+        path: .
+
+  Test:
+    runs-on: ubuntu-latest
+
+    needs: Build
 
     steps:
     - name: Checkout repository
@@ -23,11 +53,13 @@ jobs:
         python3 -m pip install --upgrade setuptools
         pip install -r requirements.txt
 
-    - name: Build and Test
+    - name: Test
       run: python3 app_tests.py
 
   Lint:
     runs-on: ubuntu-latest
+
+    needs: Test
 
     steps:
     - name: Checkout repository
@@ -46,3 +78,29 @@ jobs:
 
     - name: Lint Check
       run: flake8 .
+
+  sonar-scan:
+    runs-on: ubuntu-latest
+    
+    needs: Lint
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        python3 -m pip install --upgrade setuptools
+        pip install -r requirements.txt
+
+    - name: Run SonarCloud Scan
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
